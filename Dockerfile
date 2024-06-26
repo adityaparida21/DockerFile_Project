@@ -1,4 +1,4 @@
-FROM centos:stream8
+FROM centos:8-stream
 RUN yum install httpd zip unzip -y
 ADD https://github.com/mr-prantik/FriendNet/archive/refs/heads/main.zip /var/www/html/
 WORKDIR /var/www/html
