@@ -1,4 +1,4 @@
-FROM dokken/centos-8
+FROM centos:stream8
 RUN yum install httpd zip unzip -y
 ADD https://github.com/mr-prantik/FriendNet/archive/refs/heads/main.zip /var/www/html/
 WORKDIR /var/www/html
