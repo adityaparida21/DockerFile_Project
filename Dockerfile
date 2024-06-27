@@ -1,11 +1,11 @@
 FROM amazonlinux:2 
 RUN yum install httpd zip unzip -y
-ADD https://github.com/mr-prantik/FriendNet/archive/refs/heads/main.zip /var/www/html/
+ADD https://www.free-css.com/assets/files/free-css-templates/download/page296/spering.zip /var/www/html/
 WORKDIR /var/www/html
-RUN unzip main.zip
-RUN rm -rf main.zip
-RUN  cp -r FriendNet-main/* .
-RUN  rm -rf FriendNet-main/
+RUN unzip spering.zip
+RUN rm -rf spering.zip
+RUN  cp -r spering-html/* .
+RUN  rm -rf spering-html 
 EXPOSE 80
 CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
