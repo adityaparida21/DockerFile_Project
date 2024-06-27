@@ -1,16 +1,13 @@
 FROM amazonlinux:2
 
 # Install dependencies
-RUN yum install -y httpd git
+RUN yum install -y httpd
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Clone the GitHub repository
-RUN git clone https://github.com/mr-prantik/FriendNet.git .
-
-# Clean up any unnecessary files if needed
-RUN rm -rf .git
+# Copy index.html from host to container
+COPY index.html .
 
 # Expose port 80
 EXPOSE 80
