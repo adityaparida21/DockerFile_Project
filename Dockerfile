@@ -1,3 +1,6 @@
+# Dockerfile
+
+# Use Amazon Linux 2 as the base image
 FROM amazonlinux:2
 
 # Install Apache HTTP Server and necessary tools
@@ -10,12 +13,6 @@ RUN unzip main.zip \
     && rm -rf main.zip \
     && mv FriendNet-main/* . \
     && rm -rf FriendNet-main
-
-# Install Python if needed (assuming it's not included in your application)
-# RUN yum install python3 -y
-
-# Optional: Install additional dependencies for your application
-# RUN pip install -r requirements.txt
 
 # Set proper ownership and permissions for Apache to serve files
 RUN chown -R apache:apache /var/www/html \
