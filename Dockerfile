@@ -1,30 +1,16 @@
 FROM amazonlinux:2
 
 # Install dependencies
-RUN yum install -y httpd zip unzip curl
+RUN yum install -y httpd git
 
-# Add the zip file from the URL with a retry mechanism
-RUN URL="https://github.com/mr-prantik/FriendNet/archive/refs/heads/main.zip" \
-    && MAX_RETRIES=5 \
-    && RETRY_DELAY=10 \
-    && for i in $(seq 1 $MAX_RETRIES); do \
-           curl -o /var/www/html/friendnet.zip $URL && break; \
-           echo "Download failed, retrying in $RETRY_DELAY seconds..."; \
-           sleep $RETRY_DELAY; \
-       done \
-    && if [ ! -f "/var/www/html/friendnet.zip" ]; then \
-           echo "Failed to download after $MAX_RETRIES attempts"; \
-           exit 1; \
-       fi
+# Clone the repository from GitHub
+RUN git clone https://github.com/mr-prantik/FriendNet.git /var/www/html/FriendNet
 
 # Set working directory
-WORKDIR /var/www/html
-
-# Unzip the downloaded file
-RUN unzip friendnet.zip && rm -rf friendnet.zip
+WORKDIR /var/www/html/FriendNet
 
 # Move contents to the correct location
-RUN cp -rf FriendNet-main/* . && rm -rf FriendNet-main
+RUN cp -rf * /var/www/html/ && rm -rf /var/www/html/FriendNet
 
 # Expose port 80
 EXPOSE 80
