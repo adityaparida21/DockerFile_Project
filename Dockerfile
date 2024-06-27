@@ -1,10 +1,19 @@
-FROM amazonlinux:2 
-RUN yum install httpd zip unzip -y
-ADD https://github.com/mr-prantik/FriendNet/archive/refs/heads/main.zip /var/www/html/
+FROM amazonlinux:2
+
+# Install dependencies
+RUN yum install -y httpd git
+
+# Set working directory
 WORKDIR /var/www/html
-RUN unzip main.zip
-RUN rm -rf main.zip
-RUN  cp -rf FriendNet-main/* .
-RUN  rm -rf FriendNet-main 
+
+# Clone the GitHub repository
+RUN git clone https://github.com/mr-prantik/FriendNet.git .
+
+# Clean up any unnecessary files if needed
+RUN rm -rf .git
+
+# Expose port 80
 EXPOSE 80
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+
+# Start httpd service
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
