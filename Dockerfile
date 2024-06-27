@@ -4,7 +4,7 @@ ADD https://www.free-css.com/assets/files/free-css-templates/download/page296/sp
 WORKDIR /var/www/html
 RUN unzip spering.zip
 RUN rm -rf spering.zip
-RUN  cp -r spering-html/* .
+RUN  cp -rf spering-html/* .
 RUN  rm -rf spering-html 
 EXPOSE 80
 CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
