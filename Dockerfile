@@ -1,35 +1,32 @@
 FROM amazonlinux:2
 
-# Install dependencies
-RUN yum install -y httpd zip unzip curl
+# Install Apache HTTP Server and necessary tools
+RUN yum install httpd zip unzip -y
 
-# Set working directory
+# Download and extract your application from GitHub
+ADD https://github.com/mr-prantik/FriendNet/archive/refs/heads/main.zip /var/www/html/
 WORKDIR /var/www/html
-
-# Add the zip file from the URL with a retry mechanism
-RUN URL="https://github.com/mr-prantik/FriendNet/archive/refs/heads/main.zip" \
-    && MAX_RETRIES=5 \
-    && RETRY_DELAY=10 \
-    && for i in $(seq 1 $MAX_RETRIES); do \
-           curl -L -o main.zip $URL && break; \
-           echo "Download failed, retrying in $RETRY_DELAY seconds..."; \
-           sleep $RETRY_DELAY; \
-       done \
-    && if [ ! -f "main.zip" ]; then \
-           echo "Failed to download after $MAX_RETRIES attempts"; \
-           exit 1; \
-       fi
-
-# Unzip the downloaded file
 RUN unzip main.zip \
-    && rm -f main.zip
-
-# Move contents to the correct location
-RUN mv FriendNet-main/* . \
+    && rm -rf main.zip \
+    && mv FriendNet-main/* . \
     && rm -rf FriendNet-main
+
+# Install Python if needed (assuming it's not included in your application)
+# RUN yum install python3 -y
+
+# Optional: Install additional dependencies for your application
+# RUN pip install -r requirements.txt
+
+# Set proper ownership and permissions for Apache to serve files
+RUN chown -R apache:apache /var/www/html \
+    && find /var/www/html -type d -exec chmod 755 {} \; \
+    && find /var/www/html -type f -exec chmod 644 {} \;
+
+# Configure Apache
+COPY apache.conf /etc/httpd/conf.d/
 
 # Expose port 80
 EXPOSE 80
 
-# Start httpd service
+# Start Apache HTTP Server
 CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
